@@ -18,6 +18,7 @@ const userSchema = mongoose.Schema({
   password: {
     type: String,
     required: true,
+    select: false,  // Document doesn't return the password field
     validate: {
       validator: (value) => {
         validator.isStrongPassword(value)
@@ -32,6 +33,9 @@ const userSchema = mongoose.Schema({
       values: ["male", "female", "other"],
       message: "{VALUE} is not a valid gender"
     }
+  },
+  age: {
+    type: String
   }
 },
   {
