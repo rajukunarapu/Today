@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 const userSchema = mongoose.Schema({
   emailId: {
     type: String,
-    unique : true,
+    unique: true,
     required: true,
     validate: {
       validator: (value) => {
@@ -16,25 +16,32 @@ const userSchema = mongoose.Schema({
   },
 
   password: {
-    type : String,
-    required : true,
-    validate : {
-        validator : (value)=>{
-            validator.isStrongPassword(value)
-        },
-        message : `{VALUE} is not a strong password`
+    type: String,
+    required: true,
+    validate: {
+      validator: (value) => {
+        validator.isStrongPassword(value)
+      },
+      message: `{VALUE} is not a strong password`
     }
 
   },
+  gender: {
+    type: String,
+    enum: {
+      values: ["male", "female", "other"],
+      message: "{VALUE} is not a valid gender"
+    }
+  }
 },
-{
-  timestamps : true
-});
+  {
+    timestamps: true
+  });
 
-userSchema.methods.generateToken = async function(){
-  const token = await jwt.sign({_id : this._id},`${process.env.JWT_SECRET_KEY}`,{expiresIn:'1d'})
+userSchema.methods.generateToken = async function () {
+  const token = await jwt.sign({ _id: this._id }, `${process.env.JWT_SECRET_KEY}`, { expiresIn: '1d' })
   return token
 }
 
 const User = mongoose.model('user', userSchema)
-module.exports = {User}
+module.exports = { User }
